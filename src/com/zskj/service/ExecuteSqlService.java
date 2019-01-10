@@ -15,6 +15,6 @@ public interface ExecuteSqlService {
 
 	boolean executeSql();
 
-	void executeTask();
+	boolean executeTask();
 
 }

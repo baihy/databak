@@ -1,10 +1,3 @@
-/**
- * @项目名称: JavaTest
- * @文件名称: JobUtils.java
- * @日期: 2018年11月11日
- * @版权: 2018 河南中审科技有限公司 Inc. All rights reserved.
- * @开发公司或单位：河南中审科技有限公司研发交付中心
- */
 package com.zskj.utils;
 
 import org.quartz.CronScheduleBuilder;
@@ -37,7 +30,7 @@ public class JobUtils {
 
 	private JobUtils() {
 		try {
-			scheduler = new StdSchedulerFactory().getScheduler();
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
 		} catch (SchedulerException e) {
 			LOGGER.error("创建调度器异常:" + e.getMessage());
 		}
@@ -64,13 +57,14 @@ public class JobUtils {
 	 */
 	public void startJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, Class<? extends Job> jobClass, String cron) {
 		try {
+			LOGGER.info("执行时间是:" + cron);
 			// 创建定时任务
 			JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName).build();
 			// 创建任务计划
 			CronTrigger trigger = (CronTrigger) TriggerBuilder.newTrigger().withIdentity(triggerName, triggerGroupName).withSchedule(CronScheduleBuilder.cronSchedule(cron)).build();
 			scheduler.scheduleJob(jobDetail, trigger);
 			scheduler.start();
-		} catch (SchedulerException e) {
+		} catch (Exception e) {
 			LOGGER.error("job启动失败:" + e.getMessage());
 		}
 	}

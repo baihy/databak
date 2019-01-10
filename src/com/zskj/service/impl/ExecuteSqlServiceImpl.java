@@ -1,22 +1,18 @@
-/**
- * @项目名称: databak
- * @文件名称: ExecuteSqlServiceImpl.java
- * @日期: 2019年1月9日
- * @版权: 2019 河南中审科技有限公司 Inc. All rights reserved.
- * @开发公司或单位：河南中审科技有限公司研发交付中心
- */
 package com.zskj.service.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.zskj.jobs.TaskJob;
 import com.zskj.service.ExecuteSqlService;
 import com.zskj.utils.DbUtils;
 import com.zskj.utils.JobUtils;
-import com.zskj.utils.SettingUtils;
+import com.zskj.utils.PropertyUtils;
 
 /**
  * @author baihuayang
@@ -24,33 +20,43 @@ import com.zskj.utils.SettingUtils;
  */
 public class ExecuteSqlServiceImpl implements ExecuteSqlService {
 
-	private QueryRunner runner;
+	private final static Logger LOGGER = LoggerFactory.getLogger(ExecuteSqlServiceImpl.class);
 
 	/**
 	 * 
 	 */
 	public ExecuteSqlServiceImpl() {
 		super();
-		runner = new QueryRunner();
 	}
 
 	@Override
 	public boolean executeSql() {
 		boolean result = false;
-		String sql = SettingUtils.newInstance().getValue("sql");
-		try (Connection conn = DbUtils.getConn()) {
-			runner.update(conn, sql);
+		String sql = PropertyUtils.getValue("sql");
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DbUtils.getConn();
+			pstmt = DbUtils.getPstmt(conn, sql);
+			LOGGER.info("SQL:" + sql);
+			pstmt.executeUpdate();
 			result = true;
 		} catch (SQLException e) {
-			result = false;
+			LOGGER.info("执行Sql异常:" + e.getMessage());
+		} finally {
+			DbUtils.close(conn, pstmt, null);
 		}
 		return result;
 	}
 
 	@Override
-	public void executeTask() {
-		String cron = SettingUtils.newInstance().getValue("cron");
-		JobUtils.newInstance().startJob("jobName", "jobGroupName", "triggerName", "triggerGroupName", TaskJob.class, cron);
+	public boolean executeTask() {
+		String cron = PropertyUtils.getValue("cron");
+		if (StringUtils.isNotEmpty(cron)) {
+			JobUtils.newInstance().startJob("jobName", "jobGroupName", "triggerName", "triggerGroupName", TaskJob.class, cron);
+			return true;
+		}
+		return false;
 	}
 
 }

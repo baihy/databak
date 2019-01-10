@@ -10,7 +10,6 @@ package com.zskj.jobs;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -21,13 +20,12 @@ import org.slf4j.LoggerFactory;
  * @author baihuayang
  *
  */
-@DisallowConcurrentExecution // 不允许并发执行
 public class TaskJob implements Job {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TaskJob.class);
 
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOGGER.info("job执行时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 	}
 }
