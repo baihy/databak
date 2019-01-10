@@ -16,6 +16,9 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zskj.service.ExecuteSqlService;
+import com.zskj.service.impl.ExecuteSqlServiceImpl;
+
 /**
  * @author baihuayang
  *
@@ -24,8 +27,20 @@ public class TaskJob implements Job {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TaskJob.class);
 
+	private ExecuteSqlService executeSqlService;
+
+	/**
+	 * 
+	 */
+	public TaskJob() {
+		super();
+		executeSqlService = new ExecuteSqlServiceImpl();
+	}
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOGGER.info("job执行时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		boolean result = executeSqlService.executeSql();
+		LOGGER.info("定时执行完成，结果是：" + result);
 	}
 }

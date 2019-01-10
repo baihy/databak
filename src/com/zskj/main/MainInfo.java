@@ -8,6 +8,7 @@
 package com.zskj.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,11 +73,15 @@ public class MainInfo {
 		if (task) {
 			result = mainInfo.executeTask();
 			LOGGER.info("添加任务成功：" + result);
+			try {
+				System.in.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} else {
 			result = mainInfo.executeSql();
 			LOGGER.info("执行完成，结果是：" + result);
 		}
-		System.exit(0);
 	}
 
 	private boolean executeSql() {

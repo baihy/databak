@@ -7,10 +7,10 @@
  */
 package com.zskj.utils;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ public class PropertyUtils {
 		try {
 			prop = new Properties();
 			LOGGER.info("配置文件：" + ParameterConfigure.CONFIG);
-			InputStream is = new FileInputStream(new File(ParameterConfigure.CONFIG));
-			prop.load(is);
+			InputStream is = new FileInputStream(ParameterConfigure.CONFIG);
+			prop.load(new InputStreamReader(is, "UTF-8"));
 		} catch (IOException e) {
 			LOGGER.error("加载配置文件异常：" + e.getMessage());
 		}
