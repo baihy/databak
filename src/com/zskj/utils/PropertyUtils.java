@@ -42,6 +42,7 @@ public class PropertyUtils {
 				LOGGER.error(key + ":参数不存在！");
 				throw new IllegalArgumentException(key + ":参数不存在！");
 			}
+			LOGGER.info(key + ":" + prop.getProperty(key));
 			return prop.getProperty(key);
 		}
 		return null;
