@@ -7,6 +7,9 @@
  */
 package com.zskj.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author baihuayang
  *
@@ -21,4 +24,5 @@ public class ParameterConfigure {
 	 * 软件配置文件
 	 */
 	public static String CONFIG = "";
+	public static Map<String, String> PROP_MAP = new HashMap<String, String>();
 }

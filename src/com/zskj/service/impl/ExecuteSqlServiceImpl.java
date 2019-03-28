@@ -32,11 +32,11 @@ public class ExecuteSqlServiceImpl implements ExecuteSqlService {
 	@Override
 	public boolean executeSql() {
 		boolean result = false;
-		String sql = PropertyUtils.getValue("sql");
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
 			conn = DbUtils.getConn();
+			String sql = PropertyUtils.getValue("sql");
 			pstmt = DbUtils.getPstmt(conn, sql);
 			LOGGER.info("SQL:" + sql);
 			pstmt.executeUpdate();

@@ -43,6 +43,7 @@ public class DbUtils {
 	public static Connection getConn() {
 		Connection conn = null;
 		try {
+			LOGGER.info("url:" + url);
 			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			LOGGER.error("获取连接失败:" + e.getMessage());

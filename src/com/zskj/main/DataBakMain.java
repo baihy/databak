@@ -59,6 +59,8 @@ public class DataBakMain {
 					throw new IllegalArgumentException("配置文件：" + configFile + "格式不正确！");
 				} else {
 					ParameterConfigure.CONFIG = config.getAbsolutePath();
+					String odbcName = ParameterConfigure.PROP_MAP.get("odbcName");
+					LOGGER.info("odbcName：" + odbcName);
 				}
 			} else {
 				LOGGER.error("配置文件：" + configFile + "不存在！");
