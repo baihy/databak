@@ -24,18 +24,18 @@ import com.zskj.utils.ParameterConfigure;
  * @author baihuayang
  *
  */
-public class MainInfo {
+public class DataBakMain {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MainInfo.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataBakMain.class);
 
 	private ExecuteSqlService executeSqlService;
 
-	public MainInfo() {
+	public DataBakMain() {
 		executeSqlService = new ExecuteSqlServiceImpl();
 	}
 
 	public static void main(String[] args) {
-		MainInfo mainInfo = new MainInfo();
+		DataBakMain mainInfo = new DataBakMain();
 		Map<String, String> params = new HashMap<String, String>();
 		for (int i = 0; i < args.length; i++) {
 			String[] temp = args[i].split("=");

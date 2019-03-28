@@ -52,10 +52,6 @@ public class PropertyUtils {
 
 	public static String getValue(String key) {
 		if (propMap != null) {
-			if (!propMap.containsKey(key)) {
-				LOGGER.error(key + ":参数不存在！");
-				throw new IllegalArgumentException(key + ":参数不存在！");
-			}
 			return propMap.get(key);
 		}
 		return null;
