@@ -11,7 +11,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,28 +28,36 @@ import org.slf4j.LoggerFactory;
 public class PropertyUtils {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtils.class);
-
-	private static Properties prop = null;
+	private static Map<String, String> propMap = new HashMap<String, String>();
 	static {
 		try {
-			prop = new Properties();
+			Properties prop = new Properties();
 			LOGGER.info("配置文件：" + ParameterConfigure.CONFIG);
 			InputStream is = new FileInputStream(ParameterConfigure.CONFIG);
-			prop.load(new InputStreamReader(is, "UTF-8"));
+			prop.load(new InputStreamReader(is));
+			Set<Entry<Object, Object>> entrySet = prop.entrySet();
+			for (Iterator<Entry<Object, Object>> it = entrySet.iterator(); it.hasNext();) {
+				Entry<Object, Object> entry = it.next();
+				String key = entry.getKey().toString();
+				String value = entry.getValue().toString();
+				if (65279 == ((int) key.charAt(0))) {
+					key = key.substring(1);
+				}
+				propMap.put(key, value);
+			}
 		} catch (IOException e) {
 			LOGGER.error("加载配置文件异常：" + e.getMessage());
 		}
 	}
 
 	public static String getValue(String key) {
-		if (prop != null) {
-			if (!prop.containsKey(key)) {
+		if (propMap != null) {
+			if (!propMap.containsKey(key)) {
 				LOGGER.error(key + ":参数不存在！");
 				throw new IllegalArgumentException(key + ":参数不存在！");
 			}
-			return prop.getProperty(key);
+			return propMap.get(key);
 		}
 		return null;
 	}
-
 }
